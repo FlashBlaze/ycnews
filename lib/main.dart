@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+import 'posts.dart';
 
 void main() => runApp(YCNews());
 
@@ -32,17 +31,9 @@ class _PostDataState extends State<PostData> {
   }
 
   void getPosts() async {
-    var uri =
-        'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty&orderBy="\$key"&limitToFirst=5';
-    var response = await http.get(uri);
-    List ids = convert.jsonDecode(response.body);
-
-    for (var i = 0; i < ids.length; i++) {
-      var postUri =
-          'https://hacker-news.firebaseio.com/v0/item/${ids[i]}.json?print=pretty';
-      var postResponse = await http.get(postUri);
-      print(convert.jsonDecode(postResponse.body)['title']);
-    }
+    Post post = Post();
+    await post.getPosts();
+    print(post.posts);
   }
 
   @override
