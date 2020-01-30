@@ -23,6 +23,14 @@ class PostData extends StatefulWidget {
 }
 
 class _PostDataState extends State<PostData> {
+  // Built in lifecycle method which gets called on as soons as the widget is loaded
+  @override
+  void initState() {
+    super.initState();
+
+    getPosts();
+  }
+
   void getPosts() async {
     var uri =
         'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty&orderBy="\$key"&limitToFirst=5';
@@ -40,13 +48,7 @@ class _PostDataState extends State<PostData> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(
-          child: RaisedButton(
-        onPressed: () {
-          getPosts();
-        },
-        child: Text('Get 5 post titles'),
-      )),
+      child: Column(),
     );
   }
 }
