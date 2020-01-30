@@ -9,6 +9,9 @@ class YCNews extends StatelessWidget {
     return MaterialApp(
         title: 'YCNews',
         home: Scaffold(
+          appBar: AppBar(
+            title: Text('YCNews'),
+          ),
           body: Center(
             child: PostData(),
           ),
@@ -22,6 +25,7 @@ class PostData extends StatefulWidget {
 }
 
 class _PostDataState extends State<PostData> {
+  List<Map<String, dynamic>> fetchedPosts = [];
   // Built in lifecycle method which gets called on as soons as the widget is loaded
   @override
   void initState() {
@@ -32,14 +36,22 @@ class _PostDataState extends State<PostData> {
 
   void getPosts() async {
     Post post = Post();
-    await post.getPosts();
-    print(post.posts);
+    fetchedPosts = await post.getPosts();
+    print(fetchedPosts);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(),
+      child: Column(
+        children: fetchedPosts
+            .map((post) => Row(
+                  children: <Widget>[
+                    Text(post['title']),
+                  ],
+                ))
+            .toList(),
+      ),
     );
   }
 }

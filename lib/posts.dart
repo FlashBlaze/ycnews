@@ -4,7 +4,7 @@ import 'dart:convert' as convert;
 class Post {
   List<Map<String, dynamic>> posts = [];
 
-  Future<void> getPosts() async {
+  Future getPosts() async {
     var uri =
         'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty&orderBy="\$key"&limitToFirst=5';
     var response = await http.get(uri);
@@ -15,7 +15,7 @@ class Post {
           'https://hacker-news.firebaseio.com/v0/item/${ids[i]}.json?print=pretty';
       var postResponse = await http.get(postUri);
       posts.add(convert.jsonDecode(postResponse.body));
-      // print(convert.jsonDecode(postResponse.body)['title']);
     }
+    return posts;
   }
 }
