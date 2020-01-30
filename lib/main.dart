@@ -7,15 +7,9 @@ class YCNews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'YCNews',
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text('YCNews'),
-          ),
-          body: Center(
-            child: PostData(),
-          ),
-        ));
+      title: 'YCNews',
+      home: PostData(),
+    );
   }
 }
 
@@ -42,15 +36,12 @@ class _PostDataState extends State<PostData> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: fetchedPosts
-            .map((post) => Row(
-                  children: <Widget>[
-                    Text(post['title']),
-                  ],
-                ))
-            .toList(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('YCNews'),
+      ),
+      body: Column(
+        children: fetchedPosts.map((post) => Text(post['title'])).toList(),
       ),
     );
   }
