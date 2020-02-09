@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'posts.dart';
 
 void main() => runApp(YCNews());
@@ -39,26 +40,39 @@ class _PostDataState extends State<PostData> {
       pressed += 1;
       startValue = pressed + 10;
     });
-    print(fetchedPosts);
+    print('Pressed: $pressed and ${fetchedPosts.length}');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('YCNews'),
+        title: Text(
+          'YCNews',
+          style: TextStyle(color: Colors.black87),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
       ),
-      body: Column(
-        children: <Widget>[
-          RaisedButton(
-            onPressed: () {
-              getPosts();
-            },
-            child: Text('Fetch Posts'),
-          )
-          // fetchedPosts.map((post) => Text(post['title'])).toList(),
-        ],
+      backgroundColor: Colors.white,
+      body: Center(
+        child: fetchedPosts.length != 0
+            ? RaisedButton(
+                onPressed: () {
+                  getPosts();
+                },
+                child: Text('Fetch Posts'),
+              )
+            : SpinKitFoldingCube(
+                color: Colors.black54,
+              ),
       ),
+      // body: Column(
+      //   children: <Widget>[
+      //     // fetchedPosts.map((post) => Text(post['title'])).toList(),
+      //   ],
+      // ),
     );
   }
 }
