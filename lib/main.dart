@@ -21,14 +21,30 @@ class PostData extends StatefulWidget {
 
 class _PostDataState extends State<PostData> {
   List<Map<String, dynamic>> fetchedPosts = [];
+  List<Map<String, dynamic>> allPosts = [];
   int pressed = 0;
   int startValue = 0;
+  ScrollController _scrollController = ScrollController();
+
   // Built in lifecycle method which gets called on as soons as the widget is loaded
   @override
   void initState() {
     super.initState();
-
     getPosts();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // If we are at the bottom of the page
+        getPosts();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void getPosts() async {
@@ -36,11 +52,11 @@ class _PostDataState extends State<PostData> {
     fetchedPosts =
         await post.getPosts(startValue: startValue, endValue: startValue + 9);
     setState(() {
-      fetchedPosts = fetchedPosts;
+      allPosts.addAll(fetchedPosts);
       pressed += 1;
       startValue = pressed + 10;
     });
-    print('Pressed: $pressed and ${fetchedPosts.length}');
+    print('Pressed: $pressed and ${allPosts.length}');
   }
 
   @override
@@ -57,15 +73,15 @@ class _PostDataState extends State<PostData> {
       ),
       backgroundColor: Colors.white,
       body: Center(
-        child: fetchedPosts.length != 0
+        child: allPosts.length != 0
             ? ListView.separated(
+                controller: _scrollController,
                 padding: const EdgeInsets.all(8),
-                itemCount: fetchedPosts.length,
+                itemCount: allPosts.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     height: 50,
-                    child:
-                        Center(child: Text('${fetchedPosts[index]['title']}')),
+                    child: Center(child: Text('${allPosts[index]['title']}')),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) =>
