@@ -58,21 +58,23 @@ class _PostDataState extends State<PostData> {
       backgroundColor: Colors.white,
       body: Center(
         child: fetchedPosts.length != 0
-            ? RaisedButton(
-                onPressed: () {
-                  getPosts();
+            ? ListView.separated(
+                padding: const EdgeInsets.all(8),
+                itemCount: fetchedPosts.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    height: 50,
+                    child:
+                        Center(child: Text('${fetchedPosts[index]['title']}')),
+                  );
                 },
-                child: Text('Fetch Posts'),
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
               )
             : SpinKitFoldingCube(
                 color: Colors.black54,
               ),
       ),
-      // body: Column(
-      //   children: <Widget>[
-      //     // fetchedPosts.map((post) => Text(post['title'])).toList(),
-      //   ],
-      // ),
     );
   }
 }

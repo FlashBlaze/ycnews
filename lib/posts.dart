@@ -8,7 +8,7 @@ class Post {
     var uri =
         'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty&orderBy="\$key"&startAt="$startValue"&endAt="$endValue"';
     var response = await http.get(uri);
-    var ids = convert.jsonDecode(response.body);
+    Map<String, dynamic> ids = convert.jsonDecode(response.body);
     for (var entry in ids.entries) {
       var postUri =
           'https://hacker-news.firebaseio.com/v0/item/${entry.value}.json?print=pretty';
