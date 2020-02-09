@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'posts.dart';
 
 void main() => runApp(YCNews());
@@ -22,7 +23,7 @@ class PostData extends StatefulWidget {
 class _PostDataState extends State<PostData> {
   List<Map<String, dynamic>> fetchedPosts = [];
   List<Map<String, dynamic>> allPosts = [];
-  int pressed = 0;
+  int scrolled = 0;
   int startValue = 0;
   ScrollController _scrollController = ScrollController();
 
@@ -53,11 +54,19 @@ class _PostDataState extends State<PostData> {
         await post.getPosts(startValue: startValue, endValue: startValue + 9);
     setState(() {
       allPosts.addAll(fetchedPosts);
-      pressed += 1;
-      startValue = pressed + 10;
+      scrolled += 1;
+      startValue = scrolled + 10;
     });
-    print('Pressed: $pressed and ${allPosts.length}');
+    print('Scrolled: $scrolled and ${allPosts.length}');
   }
+
+  // _launchURL(String url) async {
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +90,18 @@ class _PostDataState extends State<PostData> {
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     height: 50,
-                    child: Center(child: Text('${allPosts[index]['title']}')),
+                    child: Center(
+                        child: FlatButton(
+                      child: Text('${allPosts[index]['title']}'),
+                      onPressed: () async {
+                        var url = '${allPosts[index]['url']}';
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch ${allPosts[index]['url']}';
+                        }
+                      },
+                    )),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) =>
