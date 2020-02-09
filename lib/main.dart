@@ -20,6 +20,8 @@ class PostData extends StatefulWidget {
 
 class _PostDataState extends State<PostData> {
   List<Map<String, dynamic>> fetchedPosts = [];
+  int pressed = 0;
+  int startValue = 0;
   // Built in lifecycle method which gets called on as soons as the widget is loaded
   @override
   void initState() {
@@ -30,7 +32,13 @@ class _PostDataState extends State<PostData> {
 
   void getPosts() async {
     Post post = Post();
-    fetchedPosts = await post.getPosts();
+    fetchedPosts =
+        await post.getPosts(startValue: startValue, endValue: startValue + 9);
+    setState(() {
+      fetchedPosts = fetchedPosts;
+      pressed += 1;
+      startValue = pressed + 10;
+    });
     print(fetchedPosts);
   }
 
@@ -41,7 +49,15 @@ class _PostDataState extends State<PostData> {
         title: Text('YCNews'),
       ),
       body: Column(
-        children: fetchedPosts.map((post) => Text(post['title'])).toList(),
+        children: <Widget>[
+          RaisedButton(
+            onPressed: () {
+              getPosts();
+            },
+            child: Text('Fetch Posts'),
+          )
+          // fetchedPosts.map((post) => Text(post['title'])).toList(),
+        ],
       ),
     );
   }
