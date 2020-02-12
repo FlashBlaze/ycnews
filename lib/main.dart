@@ -21,10 +21,8 @@ class PostData extends StatefulWidget {
 }
 
 class _PostDataState extends State<PostData> {
-  List<Map<String, dynamic>> fetchedPosts = [];
-  List<Map<String, dynamic>> allPosts = [];
-  int scrolled = 0;
-  int startValue = 0;
+  List<Map<String, dynamic>> allPosts = [], fetchedPosts = [];
+  int scrolled = 0, startValue = 0;
   ScrollController _scrollController = ScrollController();
 
   // Built in lifecycle method which gets called on as soons as the widget is loaded
