@@ -10,18 +10,18 @@ class YCNews extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'YCNews',
-      home: PostData(),
+      home: StoryData(),
     );
   }
 }
 
-class PostData extends StatefulWidget {
+class StoryData extends StatefulWidget {
   @override
-  _PostDataState createState() => _PostDataState();
+  _StoryDataState createState() => _StoryDataState();
 }
 
-class _PostDataState extends State<PostData> {
-  List<Map<String, dynamic>> allPosts = [], fetchedPosts = [];
+class _StoryDataState extends State<StoryData> {
+  List<Map<String, dynamic>> allStories = [], fetchedStories = [];
   int scrolled = 0, startValue = 0;
   ScrollController _scrollController = ScrollController();
 
@@ -29,13 +29,13 @@ class _PostDataState extends State<PostData> {
   @override
   void initState() {
     super.initState();
-    getPosts();
+    getStories();
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         // If we are at the bottom of the page
-        getPosts();
+        getStories();
       }
     });
   }
@@ -46,16 +46,16 @@ class _PostDataState extends State<PostData> {
     super.dispose();
   }
 
-  void getPosts() async {
-    Post post = Post();
-    fetchedPosts =
-        await post.getPosts(startValue: startValue, endValue: startValue + 9);
+  void getStories() async {
+    Story story = Story();
+    fetchedStories = await story.getStories(
+        startValue: startValue, endValue: startValue + 9);
     setState(() {
-      allPosts.addAll(fetchedPosts);
+      allStories.addAll(fetchedStories);
       scrolled += 1;
       startValue = scrolled * 10;
     });
-    print('Scrolled: $scrolled and ${allPosts.length}');
+    print('Scrolled: $scrolled and ${allStories.length}');
   }
 
   // _launchURL(String url) async {
@@ -80,23 +80,23 @@ class _PostDataState extends State<PostData> {
       ),
       backgroundColor: Colors.white,
       body: Center(
-        child: allPosts.length != 0
+        child: allStories.length != 0
             ? ListView.separated(
                 controller: _scrollController,
                 padding: const EdgeInsets.all(8),
-                itemCount: allPosts.length,
+                itemCount: allStories.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     height: 50,
                     child: Center(
                         child: FlatButton(
-                      child: Text('${allPosts[index]['title']}'),
+                      child: Text('${allStories[index]['title']}'),
                       onPressed: () async {
-                        var url = '${allPosts[index]['url']}';
+                        var url = '${allStories[index]['url']}';
                         if (await canLaunch(url)) {
                           await launch(url);
                         } else {
-                          throw 'Could not launch ${allPosts[index]['url']}';
+                          throw 'Could not launch ${allStories[index]['url']}';
                         }
                       },
                     )),
