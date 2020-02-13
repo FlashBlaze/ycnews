@@ -53,7 +53,7 @@ class _PostDataState extends State<PostData> {
     setState(() {
       allPosts.addAll(fetchedPosts);
       scrolled += 1;
-      startValue = scrolled + 10;
+      startValue = scrolled * 10;
     });
     print('Scrolled: $scrolled and ${allPosts.length}');
   }
