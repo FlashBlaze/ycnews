@@ -57,23 +57,16 @@ class Story {
   }
 
   Future getStories() async {
-    Story story;
-    final uri =
+    final topStoriesUri =
         'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty';
-    var response = await http.get(uri);
+    final response = await http.get(topStoriesUri);
     if (response.statusCode == 200) {
       List<int> ids = convert.jsonDecode(response.body).cast<int>();
-
-      var stories = [];
-      await Future.forEach(ids.sublist(0, 10), (id) async {
-        final storyUri =
-            'https://hacker-news.firebaseio.com/v0/item/$id.json?print=pretty';
-        final storyResponse = await http.get(storyUri);
-        final parsedJson = convert.jsonDecode(storyResponse.body);
-        story = Story.fromJson(parsedJson);
-        stories.add(story);
-      });
-      return stories;
+      return await Future.wait(ids.sublist(0, 10).map((id) async {
+        var storyResponse = await http.get(
+            'https://hacker-news.firebaseio.com/v0/item/$id.json?print=pretty');
+        return Story.fromJson(convert.jsonDecode(storyResponse.body));
+      }));
     }
   }
 }
