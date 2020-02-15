@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'posts.dart';
+import 'stories.dart';
 
 void main() => runApp(YCNews());
 
@@ -21,50 +21,25 @@ class StoryData extends StatefulWidget {
 }
 
 class _StoryDataState extends State<StoryData> {
-  List<Map<String, dynamic>> allStories = [], fetchedStories = [];
+  var allStories = [];
+  var fetchedStories = [];
   int scrolled = 0, startValue = 0;
   ScrollController _scrollController = ScrollController();
 
-  // Built in lifecycle method which gets called on as soons as the widget is loaded
+  // Built in lifecycle method which gets called as soons as the widget is loaded
   @override
   void initState() {
     super.initState();
     getStories();
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        // If we are at the bottom of the page
-        getStories();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
   }
 
   void getStories() async {
     Story story = Story();
-    fetchedStories = await story.getStories(
-        startValue: startValue, endValue: startValue + 9);
+    var fetchedStories = await story.getStories();
     setState(() {
       allStories.addAll(fetchedStories);
-      scrolled += 1;
-      startValue = scrolled * 10;
     });
-    print('Scrolled: $scrolled and ${allStories.length}');
   }
-
-  // _launchURL(String url) async {
-  //   if (await canLaunch(url)) {
-  //     await launch(url);
-  //   } else {
-  //     throw 'Could not launch $url';
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +65,9 @@ class _StoryDataState extends State<StoryData> {
                     height: 50,
                     child: Center(
                         child: FlatButton(
-                      child: Text('${allStories[index]['title']}'),
+                      child: Text('${allStories[index].title}'),
                       onPressed: () async {
-                        var url = '${allStories[index]['url']}';
+                        var url = '${allStories[index].url}';
                         if (await canLaunch(url)) {
                           await launch(url);
                         } else {
