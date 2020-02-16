@@ -56,13 +56,14 @@ class Story {
     );
   }
 
-  Future getStories() async {
+  Future getStories({int startValue = 0, int endValue = 29}) async {
     final topStoriesUri =
         'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty';
     final response = await http.get(topStoriesUri);
     if (response.statusCode == 200) {
       List<int> ids = convert.jsonDecode(response.body).cast<int>();
-      return await Future.wait(ids.sublist(0, 10).map((id) async {
+      return await Future.wait(
+          ids.sublist(startValue, endValue).map((id) async {
         var storyResponse = await http.get(
             'https://hacker-news.firebaseio.com/v0/item/$id.json?print=pretty');
         return Story.fromJson(convert.jsonDecode(storyResponse.body));

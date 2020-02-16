@@ -23,20 +23,31 @@ class StoryData extends StatefulWidget {
 class _StoryDataState extends State<StoryData> {
   var allStories = [];
   var fetchedStories = [];
+  int scrolled = 0;
   ScrollController _scrollController = ScrollController();
 
   // Built in lifecycle method which gets called as soons as the widget is loaded
   @override
   void initState() {
-    super.initState();
     getStories();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // If we are at the bottom of the page
+        getStories();
+      }
+    });
+
+    super.initState();
   }
 
   void getStories() async {
     Story story = Story();
-    var fetchedStories = await story.getStories();
+    var fetchedStories = await story.getStories(
+        startValue: scrolled * 30, endValue: scrolled * 30 + 29);
     setState(() {
       allStories.addAll(fetchedStories);
+      scrolled += 1;
     });
   }
 
