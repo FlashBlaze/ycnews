@@ -43,7 +43,7 @@ class _StoryDataState extends State<StoryData> {
 
   void getStories() async {
     Story story = Story();
-    var fetchedStories = await story.getStories(
+    fetchedStories = await story.getStories(
         startValue: scrolled * 30, endValue: scrolled * 30 + 29);
     setState(() {
       allStories.addAll(fetchedStories);
@@ -82,32 +82,18 @@ class _StoryDataState extends State<StoryData> {
                         await launch(url,
                             forceWebView: true, enableJavaScript: true);
                       } else {
-                        throw 'Could not launch ${allStories[index]['url']}';
+                        throw 'Could not launch ${allStories[index].url}';
                       }
                     },
+                    trailing: Column(
+                      children: <Widget>[
+                        Icon(Icons.comment),
+                        Text(allStories[index].kids == null
+                            ? '0'
+                            : '${allStories[index].kids.length}')
+                      ],
+                    ),
                   );
-                  // return Container(
-                  //     height: 50,
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.start,
-                  //       children: <Widget>[
-                  //         Flexible(
-                  //           child: FlatButton(
-                  //             child: Text(
-                  //               '${allStories[index].title}',
-                  //             ),
-                  //             onPressed: () async {
-                  //               var url = '${allStories[index].url}';
-                  //               if (await canLaunch(url)) {
-                  //                 await launch(url, forceWebView: true);
-                  //               } else {
-                  //                 throw 'Could not launch ${allStories[index]['url']}';
-                  //               }
-                  //             },
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ));
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),
