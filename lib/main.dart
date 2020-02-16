@@ -29,6 +29,8 @@ class _StoryDataState extends State<StoryData> {
   // Built in lifecycle method which gets called as soons as the widget is loaded
   @override
   void initState() {
+    super.initState();
+
     getStories();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -37,8 +39,6 @@ class _StoryDataState extends State<StoryData> {
         getStories();
       }
     });
-
-    super.initState();
   }
 
   void getStories() async {
@@ -71,28 +71,43 @@ class _StoryDataState extends State<StoryData> {
                 padding: const EdgeInsets.all(8),
                 itemCount: allStories.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Flexible(
-                            child: FlatButton(
-                              child: Text(
-                                '${allStories[index].title}',
-                              ),
-                              onPressed: () async {
-                                var url = '${allStories[index].url}';
-                                if (await canLaunch(url)) {
-                                  await launch(url, forceWebView: true);
-                                } else {
-                                  throw 'Could not launch ${allStories[index]['url']}';
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ));
+                  return ListTile(
+                    title: Text(
+                      '${allStories[index].title}',
+                    ),
+                    subtitle: Text(Uri.parse('${allStories[index].url}').host),
+                    onTap: () async {
+                      var url = '${allStories[index].url}';
+                      if (await canLaunch(url)) {
+                        await launch(url,
+                            forceWebView: true, enableJavaScript: true);
+                      } else {
+                        throw 'Could not launch ${allStories[index]['url']}';
+                      }
+                    },
+                  );
+                  // return Container(
+                  //     height: 50,
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.start,
+                  //       children: <Widget>[
+                  //         Flexible(
+                  //           child: FlatButton(
+                  //             child: Text(
+                  //               '${allStories[index].title}',
+                  //             ),
+                  //             onPressed: () async {
+                  //               var url = '${allStories[index].url}';
+                  //               if (await canLaunch(url)) {
+                  //                 await launch(url, forceWebView: true);
+                  //               } else {
+                  //                 throw 'Could not launch ${allStories[index]['url']}';
+                  //               }
+                  //             },
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ));
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),
