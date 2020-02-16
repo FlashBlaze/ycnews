@@ -72,20 +72,27 @@ class _StoryDataState extends State<StoryData> {
                 itemCount: allStories.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    height: 50,
-                    child: Center(
-                        child: FlatButton(
-                      child: Text('${allStories[index].title}'),
-                      onPressed: () async {
-                        var url = '${allStories[index].url}';
-                        if (await canLaunch(url)) {
-                          await launch(url, forceWebView: true);
-                        } else {
-                          throw 'Could not launch ${allStories[index]['url']}';
-                        }
-                      },
-                    )),
-                  );
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Flexible(
+                            child: FlatButton(
+                              child: Text(
+                                '${allStories[index].title}',
+                              ),
+                              onPressed: () async {
+                                var url = '${allStories[index].url}';
+                                if (await canLaunch(url)) {
+                                  await launch(url, forceWebView: true);
+                                } else {
+                                  throw 'Could not launch ${allStories[index]['url']}';
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ));
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),
