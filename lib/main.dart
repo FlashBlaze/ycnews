@@ -79,7 +79,7 @@ class _StoryDataState extends State<StoryData> {
                       onPressed: () async {
                         var url = '${allStories[index].url}';
                         if (await canLaunch(url)) {
-                          await launch(url);
+                          await launch(url, forceWebView: true);
                         } else {
                           throw 'Could not launch ${allStories[index]['url']}';
                         }
