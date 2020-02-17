@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'stories.dart';
+
+import 'package:ycnews/custom_drawer.dart';
+import 'package:ycnews/screens/settings.dart';
+import 'package:ycnews/stories.dart';
 
 void main() => runApp(YCNews());
 
@@ -10,7 +13,12 @@ class YCNews extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'YCNews',
-      home: StoryData(),
+      // home: StoryData(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => StoryData(),
+        '/settings': (context) => SettingsScreen(),
+      },
     );
   }
 }
@@ -56,15 +64,18 @@ class _StoryDataState extends State<StoryData> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'YCNews',
+          'Hacker News Reader',
           style: TextStyle(color: Colors.black87),
         ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
       ),
+      drawer: Drawer(
+        child: CustomDrawer(),
+      ),
       backgroundColor: Colors.white,
-      body: Center(
+      body: SafeArea(
         child: allStories.length != 0
             ? ListView.separated(
                 controller: _scrollController,
@@ -85,12 +96,18 @@ class _StoryDataState extends State<StoryData> {
                         throw 'Could not launch ${allStories[index].url}';
                       }
                     },
+                    leading: Column(children: <Widget>[
+                      Icon(Icons.arrow_drop_up),
+                      allStories[index].score == null
+                          ? Text('0')
+                          : Text('${allStories[index].score}')
+                    ]),
                     trailing: Column(
                       children: <Widget>[
                         Icon(Icons.comment),
-                        Text(allStories[index].kids == null
-                            ? '0'
-                            : '${allStories[index].kids.length}')
+                        allStories[index].kids == null
+                            ? Text('0')
+                            : Text('${allStories[index].kids.length}'),
                       ],
                     ),
                   );
