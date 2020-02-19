@@ -102,13 +102,28 @@ class _StoryDataState extends State<StoryData> {
                           ? Text('0')
                           : Text('${allStories[index].score}')
                     ]),
-                    trailing: Column(
-                      children: <Widget>[
-                        Icon(Icons.comment),
-                        allStories[index].kids == null
-                            ? Text('0')
-                            : Text('${allStories[index].kids.length}'),
-                      ],
+                    trailing: InkWell(
+                      // Temporary code added to view raw comments web view for now
+                      onTap: () async {
+                        var url =
+                            'https://hacker-news.firebaseio.com/v0/item/${allStories[index].id}.json?print=pretty';
+                        if (await canLaunch(url)) {
+                          await launch(
+                            url,
+                            forceWebView: true,
+                          );
+                        } else {
+                          throw 'Could not launch ${allStories[index].url}';
+                        }
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.comment),
+                          allStories[index].kids == null
+                              ? Text('0')
+                              : Text('${allStories[index].kids.length}'),
+                        ],
+                      ),
                     ),
                   );
                 },
