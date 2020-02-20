@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -21,19 +22,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: ListTile(
                 leading: Icon(Icons.grade),
                 title: Text('Rate on Play Store'),
-                onTap: () {},
+                onTap: () async {
+                  var url =
+                      'https://play.google.com/store/apps/details?id=com.flashblaze.ycnews';
+                  if (await canLaunch(url)) {
+                    await launch(
+                      url,
+                    );
+                  } else {
+                    throw 'Could not open Play Store';
+                  }
+                },
               )),
               SimpleDialogOption(
                   child: ListTile(
-                leading: Icon(Icons.launch),
-                title: Text('View on GitHub'),
-                onTap: () {},
-              )),
+                      leading: Icon(Icons.launch),
+                      title: Text('View on GitHub'),
+                      onTap: () async {
+                        var url = 'https://github.com/FlashBlaze/ycnews';
+                        if (await canLaunch(url)) {
+                          await launch(
+                            url,
+                          );
+                        } else {
+                          throw 'Could not open GitHub';
+                        }
+                      })),
               SimpleDialogOption(
                   child: ListTile(
                 leading: Icon(Icons.launch),
                 title: Text('View my website'),
-                onTap: () {},
+                onTap: () async {
+                  var url = 'https://flashblaze';
+                  if (await canLaunch(url)) {
+                    await launch(
+                      url,
+                    );
+                  } else {
+                    throw 'Could not launch website';
+                  }
+                },
               )),
             ],
           );
