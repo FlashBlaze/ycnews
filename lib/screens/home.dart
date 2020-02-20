@@ -30,14 +30,23 @@ class _TopStoriesState extends State<TopStories> {
     });
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void getStories() async {
     Story story = Story();
     fetchedStories = await story.getStories(
         startValue: scrolled * 30, endValue: scrolled * 30 + 29);
-    setState(() {
-      allStories.addAll(fetchedStories);
-      scrolled += 1;
-    });
+
+    if (mounted) {
+      setState(() {
+        allStories.addAll(fetchedStories);
+        scrolled += 1;
+      });
+    }
   }
 
   @override
