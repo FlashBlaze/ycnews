@@ -55,9 +55,18 @@ class _TopStoriesState extends State<TopStories> {
                     title: Text(
                       '${allStories[index].title}',
                     ),
-                    subtitle: Text(Uri.parse('${allStories[index].url}').host),
+                    subtitle: allStories[index].url == null
+                        ? Text('news.ycombinator.com')
+                        : Text(Uri.parse('${allStories[index].url}').host),
                     onTap: () async {
-                      var url = '${allStories[index].url}';
+                      var url = '';
+                      if (allStories[index].url == null) {
+                        // Temporary code added to view raw comments in web view for now
+                        url =
+                            'https://news.ycombinator.com/item?id=${allStories[index].id}';
+                      } else {
+                        url = '${allStories[index].url}';
+                      }
                       if (await canLaunch(url)) {
                         await launch(url,
                             forceWebView: true, enableJavaScript: true);
@@ -65,17 +74,19 @@ class _TopStoriesState extends State<TopStories> {
                         throw 'Could not launch ${allStories[index].url}';
                       }
                     },
-                    leading: Column(children: <Widget>[
-                      Icon(Icons.arrow_drop_up),
-                      allStories[index].score == null
-                          ? Text('0')
-                          : Text('${allStories[index].score}')
-                    ]),
+                    leading: Column(
+                      children: <Widget>[
+                        Icon(Icons.arrow_drop_up),
+                        allStories[index].score == null
+                            ? Text('0')
+                            : Text('${allStories[index].score}')
+                      ],
+                    ),
                     trailing: InkWell(
-                      // Temporary code added to view raw comments web view for now
+                      // Temporary code added to view raw comments in web view for now
                       onTap: () async {
                         var url =
-                            'https://hacker-news.firebaseio.com/v0/item/${allStories[index].id}.json?print=pretty';
+                            'https://news.ycombinator.com/item?id=${allStories[index].id}';
                         if (await canLaunch(url)) {
                           await launch(
                             url,
