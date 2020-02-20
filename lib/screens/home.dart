@@ -4,12 +4,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:ycnews/stories.dart';
 
-class StoryData extends StatefulWidget {
+class TopStories extends StatefulWidget {
   @override
-  _StoryDataState createState() => _StoryDataState();
+  _TopStoriesState createState() => _TopStoriesState();
 }
 
-class _StoryDataState extends State<StoryData> {
+class _TopStoriesState extends State<TopStories> {
   var allStories = [];
   var fetchedStories = [];
   int scrolled = 0;
