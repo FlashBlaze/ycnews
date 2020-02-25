@@ -12,6 +12,8 @@ class TopStories extends StatefulWidget {
 class _TopStoriesState extends State<TopStories> {
   var allStories = [];
   var fetchedStories = [];
+  List<bool> _initialSelected = List.generate(30, (i) => false);
+  List<bool> _selected = [];
   int scrolled = 0;
   ScrollController _scrollController = ScrollController();
 
@@ -38,6 +40,8 @@ class _TopStoriesState extends State<TopStories> {
 
   void getStories() async {
     Story story = Story();
+    _selected = List.generate(30, (i) => false);
+    _selected.addAll(_initialSelected);
     fetchedStories = await story.getStories(
         startValue: scrolled * 30, endValue: scrolled * 30 + 29);
 
@@ -60,58 +64,65 @@ class _TopStoriesState extends State<TopStories> {
                 padding: const EdgeInsets.all(8),
                 itemCount: allStories.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text(
-                      '${allStories[index].title}',
-                    ),
-                    subtitle: allStories[index].url == null
-                        ? Text('news.ycombinator.com')
-                        : Text(Uri.parse('${allStories[index].url}').host),
-                    onTap: () async {
-                      var url = '';
-                      if (allStories[index].url == null) {
-                        // Temporary code added to view raw comments in web view for now
-                        url =
-                            'https://news.ycombinator.com/item?id=${allStories[index].id}';
-                      } else {
-                        url = '${allStories[index].url}';
-                      }
-                      if (await canLaunch(url)) {
-                        await launch(url,
-                            forceWebView: true, enableJavaScript: true);
-                      } else {
-                        throw 'Could not launch ${allStories[index].url}';
-                      }
-                    },
-                    leading: Column(
-                      children: <Widget>[
-                        Icon(Icons.arrow_drop_up),
-                        allStories[index].score == null
-                            ? Text('0')
-                            : Text('${allStories[index].score}')
-                      ],
-                    ),
-                    trailing: InkWell(
-                      // Temporary code added to view raw comments in web view for now
+                  return ListTileTheme(
+                    selectedColor: Colors.grey,
+                    child: ListTile(
+                      selected: _selected[index],
+                      title: Text(
+                        '${allStories[index].title}',
+                      ),
+                      subtitle: allStories[index].url == null
+                          ? Text('news.ycombinator.com')
+                          : Text(Uri.parse('${allStories[index].url}').host),
                       onTap: () async {
-                        var url =
-                            'https://news.ycombinator.com/item?id=${allStories[index].id}';
+                        var url = '';
+                        if (allStories[index].url == null) {
+                          // Temporary code added to view raw comments in web view for now
+                          url =
+                              'https://news.ycombinator.com/item?id=${allStories[index].id}';
+                        } else {
+                          url = '${allStories[index].url}';
+                        }
                         if (await canLaunch(url)) {
-                          await launch(
-                            url,
-                            forceWebView: true,
-                          );
+                          setState(() {
+                            _selected[index] = true;
+                          });
+                          await launch(url,
+                              forceWebView: true, enableJavaScript: true);
                         } else {
                           throw 'Could not launch ${allStories[index].url}';
                         }
                       },
-                      child: Column(
+                      leading: Column(
                         children: <Widget>[
-                          Icon(Icons.comment),
-                          allStories[index].kids == null
+                          Icon(Icons.arrow_drop_up),
+                          allStories[index].score == null
                               ? Text('0')
-                              : Text('${allStories[index].kids.length}'),
+                              : Text('${allStories[index].score}')
                         ],
+                      ),
+                      trailing: InkWell(
+                        // Temporary code added to view raw comments in web view for now
+                        onTap: () async {
+                          var url =
+                              'https://news.ycombinator.com/item?id=${allStories[index].id}';
+                          if (await canLaunch(url)) {
+                            await launch(
+                              url,
+                              forceWebView: true,
+                            );
+                          } else {
+                            throw 'Could not launch ${allStories[index].url}';
+                          }
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.comment),
+                            allStories[index].kids == null
+                                ? Text('0')
+                                : Text('${allStories[index].kids.length}'),
+                          ],
+                        ),
                       ),
                     ),
                   );

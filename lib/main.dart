@@ -28,13 +28,13 @@ class _YCNewsState extends State<YCNews> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'YCNews',
+      title: 'Hacker News Reader',
       home: Scaffold(
         body: Container(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               title: Text('Home'),

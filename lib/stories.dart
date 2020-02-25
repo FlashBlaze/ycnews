@@ -68,6 +68,9 @@ class Story {
             'https://hacker-news.firebaseio.com/v0/item/$id.json?print=pretty');
         return Story.fromJson(convert.jsonDecode(storyResponse.body));
       }));
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load stories');
     }
   }
 }
