@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:ycnews/stories.dart';
 
@@ -16,6 +17,9 @@ class _TopStoriesState extends State<TopStories> {
   List<bool> _selected = [];
   int scrolled = 0;
   ScrollController _scrollController = ScrollController();
+  SharedPreferences prefs;
+  bool _enableJS = true;
+  bool _enableWebView = true;
 
   // Built in lifecycle method which gets called as soons as the widget is loaded
   @override
@@ -23,12 +27,21 @@ class _TopStoriesState extends State<TopStories> {
     super.initState();
 
     getStories();
+    _getSettings();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         // If we are at the bottom of the page
         getStories();
       }
+    });
+  }
+
+  _getSettings() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _enableJS = prefs.getBool('_enableJS');
+      _enableWebView = prefs.getBool('_enableWebView');
     });
   }
 
@@ -88,7 +101,8 @@ class _TopStoriesState extends State<TopStories> {
                             _selected[index] = true;
                           });
                           await launch(url,
-                              forceWebView: true, enableJavaScript: true);
+                              forceWebView: _enableWebView,
+                              enableJavaScript: _enableJS);
                         } else {
                           throw 'Could not launch ${allStories[index].url}';
                         }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -7,6 +8,10 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool _enableJS = true;
+  bool _enableWebView = true;
+  SharedPreferences prefs;
+
   Future<void> _showAboutDialog() async {
     switch (await showDialog(
         context: context,
@@ -70,12 +75,64 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    _getJS();
+    _getWebView();
+  }
+
+  _getJS() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _enableJS = prefs.getBool('_enableJS');
+    });
+  }
+
+  _setJS(bool value) async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _enableJS = value;
+      prefs.setBool('_enableJS', value);
+    });
+  }
+
+  _getWebView() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _enableWebView = prefs.getBool('_enableWebView');
+    });
+  }
+
+  _setWebView(bool value) async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _enableWebView = value;
+      prefs.setBool('_enableWebView', value);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Container(
           child: Column(
             children: <Widget>[
+              SwitchListTile(
+                  activeColor: Colors.grey[850],
+                  title: Text('Javascript'),
+                  value: _enableJS ?? true,
+                  onChanged: (bool value) {
+                    _setJS(value);
+                  }),
+              SwitchListTile(
+                  activeColor: Colors.grey[850],
+                  title: Text('WebView'),
+                  value: _enableWebView ?? true,
+                  onChanged: (bool value) {
+                    _setWebView(value);
+                  }),
               ListTile(
                 title: Text('About'),
                 onTap: () {
