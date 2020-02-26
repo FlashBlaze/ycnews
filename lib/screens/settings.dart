@@ -8,7 +8,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _enableJS = true;
+  bool _enableJS = false;
   bool _enableWebView = true;
   SharedPreferences prefs;
 
@@ -123,9 +123,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   activeColor: Colors.grey[850],
                   title: Text('Javascript'),
                   value: _enableJS ?? true,
-                  onChanged: (bool value) {
-                    _setJS(value);
-                  }),
+                  onChanged: _enableWebView
+                      ? (bool value) {
+                          _setJS(value);
+                        }
+                      : null),
               SwitchListTile(
                   activeColor: Colors.grey[850],
                   title: Text('WebView'),

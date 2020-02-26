@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:ycnews/screens/web_view.dart';
 
 import 'package:ycnews/stories.dart';
 
@@ -16,10 +20,11 @@ class _TopStoriesState extends State<TopStories> {
   List<bool> _initialSelected = List.generate(30, (i) => false);
   List<bool> _selected = [];
   int scrolled = 0;
+  bool _enableWebView = true;
+  bool _enableJS = true;
+
   ScrollController _scrollController = ScrollController();
   SharedPreferences prefs;
-  bool _enableJS = true;
-  bool _enableWebView = true;
 
   // Built in lifecycle method which gets called as soons as the widget is loaded
   @override
@@ -96,15 +101,22 @@ class _TopStoriesState extends State<TopStories> {
                         } else {
                           url = '${allStories[index].url}';
                         }
-                        if (await canLaunch(url)) {
-                          setState(() {
-                            _selected[index] = true;
-                          });
-                          await launch(url,
-                              forceWebView: _enableWebView,
-                              enableJavaScript: _enableJS);
+                        if (_enableWebView) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => WebViewScreen(
+                                  selectedUrl: url, enableJS: _enableJS),
+                            ),
+                          );
                         } else {
-                          throw 'Could not launch ${allStories[index].url}';
+                          if (await canLaunch(url)) {
+                            setState(() {
+                              _selected[index] = true;
+                            });
+                            await launch(url);
+                          } else {
+                            throw 'Could not launch ${allStories[index].url}';
+                          }
                         }
                       },
                       leading: Column(

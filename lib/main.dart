@@ -31,7 +31,7 @@ class _YCNewsState extends State<YCNews> {
       title: 'Hacker News Reader',
       home: Scaffold(
         body: Container(
-          child: _widgetOptions.elementAt(_selectedIndex),
+          child: _widgetOptions[_selectedIndex],
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
