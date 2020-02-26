@@ -6,6 +6,7 @@
 
 - Added options to enable or disable WebView and Javascript in settings
 - Visited links greyed out for that sessions
+- Display app version
 
 ### :wrench: Code changes
 

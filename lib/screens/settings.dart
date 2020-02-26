@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info/package_info.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -10,6 +11,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _enableJS = false;
   bool _enableWebView = true;
+  String version;
+
   SharedPreferences prefs;
 
   Future<void> _showAboutDialog() async {
@@ -80,6 +83,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     _getJS();
     _getWebView();
+    _getInfo();
   }
 
   _getJS() async {
@@ -112,6 +116,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  _getInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,6 +150,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _showAboutDialog();
                 },
               ),
+              ListTile(
+                enabled: false,
+                title: Text('Version'),
+                subtitle: Text(version),
+              )
             ],
           ),
         ),
