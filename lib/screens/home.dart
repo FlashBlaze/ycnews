@@ -99,6 +99,9 @@ class _TopStoriesState extends State<TopStories> {
                           url = '${allStories[index].url}';
                         }
                         if (_enableWebView) {
+                          setState(() {
+                            _selected[index] = true;
+                          });
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (BuildContext context) => WebViewScreen(

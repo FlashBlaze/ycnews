@@ -19,8 +19,7 @@ class WebViewScreen extends StatelessWidget {
     return Scaffold(
         body: SafeArea(
       child: WebView(
-        initialUrl:
-            'https://www.whatismybrowser.com/detect/is-javascript-enabled',
+        initialUrl: selectedUrl,
         javascriptMode:
             enableJS ? JavascriptMode.unrestricted : JavascriptMode.disabled,
         onWebViewCreated: (WebViewController webViewController) {
