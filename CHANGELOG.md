@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.2
+
+### :sparkles: Features
+
+- Added options to enable or disable WebView and Javascript in settings
+- Visited links greyed out for that sessions
+
+### :wrench: Code changes
+
+- Using custom `WebView` instead of webview of `url_launhcer` to gain better control of the webview to add more options to it in future
+
 ## 1.0.1
 
 ### :sparkles: Features
