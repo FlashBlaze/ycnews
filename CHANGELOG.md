@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3
+
+### :bug: Bug Fixes
+
+- Fixed not loading of settings screen
+
 ## 1.0.2
 
 ### :sparkles: Features

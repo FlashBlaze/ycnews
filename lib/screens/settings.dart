@@ -153,7 +153,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListTile(
                 enabled: false,
                 title: Text('Version'),
-                subtitle: Text(version),
+                subtitle: Text(version ?? ''),
               )
             ],
           ),
