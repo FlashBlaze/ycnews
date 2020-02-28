@@ -42,8 +42,8 @@ class _TopStoriesState extends State<TopStories> {
   _getSettings() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      _enableJS = prefs.getBool('_enableJS');
-      _enableWebView = prefs.getBool('_enableWebView');
+      _enableJS = prefs.getBool('_enableJS') ?? true;
+      _enableWebView = prefs.getBool('_enableWebView') ?? true;
     });
   }
 

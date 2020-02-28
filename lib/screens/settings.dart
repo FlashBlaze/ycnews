@@ -9,8 +9,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _enableJS = false;
-  bool _enableWebView = true;
+  bool _enableJS;
+  bool _enableWebView;
   String version;
 
   SharedPreferences prefs;
@@ -89,7 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   _getJS() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      _enableJS = prefs.getBool('_enableJS');
+      _enableJS = prefs.getBool('_enableJS') ?? true;
     });
   }
 
@@ -104,7 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   _getWebView() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      _enableWebView = prefs.getBool('_enableWebView');
+      _enableWebView = prefs.getBool('_enableWebView') ?? true;
     });
   }
 

@@ -1,7 +1,7 @@
 name: ycnews
 description: Client for HackerNews
 
-version: 1.0.3+4
+version: 1.0.3+5
 
 environment:
   sdk: '>=2.2.2 <3.0.0'
